@@ -15,6 +15,7 @@ AWBaseSpellActor::AWBaseSpellActor(): SpellParams(nullptr)
 {
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
+	bReplicateUsingRegisteredSubObjectList = true;
 	AActor::SetReplicateMovement(true);
 }
 
@@ -42,9 +43,18 @@ void AWBaseSpellActor::ResetSpell()
 // 	Destroy();
 // }
 
+void AWBaseSpellActor::OnRep_SpellParams()
+{
+	bHasReplicatedData = SpellParams != nullptr;
+}
+
 void AWBaseSpellActor::SetSpellParams_Implementation(USpellParams* Params)
 {
 	SpellParams = Params;
+	if (!SpellParams || !HasAuthority()) return;
+
+	SpellParams->Rename(nullptr, this, REN_DontCreateRedirectors | REN_DoNotDirty);
+	AddReplicatedSubObject(SpellParams);
 }
 
 bool AWBaseSpellActor::CheckForCollisionTarget(const AActor* OtherActor) const

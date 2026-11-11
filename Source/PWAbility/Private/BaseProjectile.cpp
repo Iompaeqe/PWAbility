@@ -84,11 +84,13 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	if (ShouldIgnoreOverlap(OtherActor)) return;
 	if (IsActorProjectile(OtherActor))
 	{
-		HandleProjectileCollision(OtherActor);
+		const AWBaseSpellActor* OtherSpell = Cast<AWBaseSpellActor>(OtherActor);
+		if (HasReplicatedData() && (!OtherSpell || OtherSpell->HasReplicatedData()))
+			HandleProjectileCollision(OtherActor);
 		return;
 	}
 	if (!CanHitTarget(OtherActor)) return;
-	if (!SpellParams) return;
+	if (!SpellParams || !HasReplicatedData()) return;
 	if (!CheckForCollisionTarget(OtherActor)) return;
 
 	LastHitActor = OtherActor;
@@ -99,6 +101,20 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	OnProjectileOverlap(OtherActor);
+}
+
+void ABaseProjectile::OnRep_SpellParams()
+{
+	Super::OnRep_SpellParams();
+
+	TArray<AActor*> OverlappingActors;
+	Sphere->GetOverlappingActors(OverlappingActors, ABaseProjectile::StaticClass());
+	for (AActor* OtherActor : OverlappingActors)
+	{
+		ABaseProjectile* Other = Cast<ABaseProjectile>(OtherActor);
+		OnOverlap(Sphere, Other, Other->Sphere, 0, false, FHitResult());
+		Other->OnOverlap(Other->Sphere, this, Sphere, 0, false, FHitResult());
+	}
 }
 
 void ABaseProjectile::HandleProjectileCollision(const AActor* OtherActor)

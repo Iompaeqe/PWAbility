@@ -107,6 +107,7 @@ protected:
 	virtual bool CanHitTarget(const AActor* OtherActor);
 	FORCEINLINE virtual bool ShouldDestroy() const { return HitCount == DestroyOnHit; }
 	virtual void HandleProjectileCollision(const AActor* OtherActor);
+	virtual void OnRep_SpellParams() override;
 	virtual bool ShouldIgnoreOverlap(const AActor* OtherActor) const;
 private:
 

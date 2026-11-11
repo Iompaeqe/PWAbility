@@ -27,12 +27,20 @@ public:
 	// UFUNCTION()
 	// void OnGamePhaseChanged(EGamePhase NewPhase);
 	
-	UPROPERTY(BlueprintReadWrite, Replicated)
+	UPROPERTY(BlueprintReadWrite, ReplicatedUsing=OnRep_SpellParams)
 	USpellParams* SpellParams;
+	UFUNCTION()
+	virtual void OnRep_SpellParams();
+
+	UFUNCTION(BlueprintPure, Category = "BaseSpell")
+	bool HasReplicatedData() const { return HasAuthority() || bHasReplicatedData; }
 
 	virtual void SetSpellParams_Implementation(USpellParams* Params) override;
 	
 protected:
+	UPROPERTY(BlueprintReadOnly, Category = "BaseSpell")
+	bool bHasReplicatedData = false;
+
 	//Target
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	virtual bool CheckForCollisionTarget(const AActor* OtherActor) const;
