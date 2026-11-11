@@ -61,6 +61,8 @@ bool ABaseProjectile::ShouldIgnoreOverlap(const AActor* OtherActor) const
 
 	if (IsDontTriggerCollision(OtherActor))
 		return true;
+	if (IsSameCast(OtherActor))
+		return true;
 
 	return false;
 }

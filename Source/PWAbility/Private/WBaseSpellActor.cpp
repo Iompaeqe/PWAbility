@@ -103,6 +103,13 @@ bool AWBaseSpellActor::IsAlly(const AActor* OtherActor) const
 #endif
 }
 
+bool AWBaseSpellActor::IsSameCast(const AActor* OtherActor) const
+{
+	const AWBaseSpellActor* Other = Cast<AWBaseSpellActor>(OtherActor);
+	if (!Other || !SpellParams || !Other->SpellParams) return false;
+	return SpellParams->CastId.IsValid() && SpellParams->CastId == Other->SpellParams->CastId;
+}
+
 bool AWBaseSpellActor::IsActorProjectile(const AActor* OtherActor)
 {
 	return OtherActor->Implements<UProjectile>();

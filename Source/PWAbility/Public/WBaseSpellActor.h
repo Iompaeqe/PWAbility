@@ -53,6 +53,8 @@ protected:
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	virtual bool IsAlly(const AActor* OtherActor) const;
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
+	virtual bool IsSameCast(const AActor* OtherActor) const;
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	static bool IsActorProjectile(const AActor* OtherActor);
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	static bool IsNoCollision(const AActor* OtherActor);
