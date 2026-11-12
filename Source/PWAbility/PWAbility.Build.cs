@@ -1,7 +1,6 @@
 // Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 using UnrealBuildTool;
-using System.IO;
 
 public class PWAbility : ModuleRules
 {
@@ -45,18 +44,7 @@ public class PWAbility : ModuleRules
 			}
 			);
 		
-		string TeamsPluginPath = Path.Combine(ModuleDirectory, "../../../PWTeams/PWTeams.uplugin");
-        if (File.Exists(TeamsPluginPath))
-        {
-            PublicDefinitions.Add("WITH_PWTEAMS=1");
-            System.Console.WriteLine("PWAbility: PWTeams plugin found, WITH_PWTEAMS=1");
-            PrivateDependencyModuleNames.Add("PWTeams"); 
-        }
-        else
-        {
-            PublicDefinitions.Add("WITH_PWTEAMS=0");
-            System.Console.WriteLine("PWAbility: PWTeams plugin not found, WITH_PWTEAMS=0");
-        }
+		PrivateDependencyModuleNames.Add("PWTeams");
 		
 		
 		DynamicallyLoadedModuleNames.AddRange(
