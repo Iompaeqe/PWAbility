@@ -26,6 +26,7 @@ public: // ---- PROPERTIES
 	void OnProjectileOverlap(AActor* OtherActor);
 	
 protected:
+	// Movement component that flies the projectile.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile|Movement")
 	TObjectPtr<UWProjectileMovementComponent> ProjectileMovement;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -42,20 +43,27 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = "Projectile|Data")
 	bool bHitEffectsPlayed = false;
 	
+	// Number of hits after which the projectile is destroyed; 0 never destroys it on hit.
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	int8 DestroyOnHit = 1;
+	// Allows hitting the same actor twice in a row, for piercing or bouncing projectiles.
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	bool bCanHitTheSameTarget = false;
+	// Seconds before the same actor can be hit again.
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	float TargetHitCooldown = .2f;
 
 private:
+	// What happens when this projectile meets another one.
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	EProjectileVsProjectilePolicy ProjectileVsProjectilePolicy = EProjectileVsProjectilePolicy::DestroySelf;
+	// Niagara effect played where the projectile hits.
 	UPROPERTY(EditAnywhere, Category = "Projectile|Effects")
 	TObjectPtr<UNiagaraSystem> ImpactEffect;
+	// Sound played where the projectile hits.
 	UPROPERTY(EditAnywhere, Category = "Projectile|Effects")
 	TObjectPtr<USoundBase> ImpactSound;
+	// Sound that loops on the projectile while it flies.
 	UPROPERTY(EditAnywhere, Category = "Projectile|Effects")
 	TObjectPtr<USoundBase> ActiveSoundLoop;
 	UPROPERTY()

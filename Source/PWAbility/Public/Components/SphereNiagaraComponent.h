@@ -19,10 +19,13 @@ public:
 
 protected:
 
+	// Effect shown for the sphere.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UNiagaraComponent> NiagaraComponent;
+	// Sphere that blocks movement.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> BlockComponent;
+	// Sphere that reports overlaps.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> OverlapComponent;
 

@@ -21,6 +21,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UDecalComponent> DecalComponent;
 
+	// Dynamic material of the decal, created at runtime so its parameters can change.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UMaterialInstanceDynamic* DecalMaterialInstance;
 };

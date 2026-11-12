@@ -37,13 +37,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile|Movement")
 	USplineComponent* SplineComponent;
 
+	// Destroys the projectile when it reaches the end of its spline.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
 	bool DestroyOnPathComplete = true;
 
+	// Speed multiplier along the path; the curve's time runs from 0 at the start of the spline to 1 at its end.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile|Movement")
 	FRuntimeFloatCurve CustomProjectileSpeedMultiplier;
+	// Shortest path the projectile will fly, as a fraction of its range.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile|Movement")
 	float MinimumRangeMultiplier = .5;
+	// Turns the projectile to face along the spline as it moves.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile|Movement")
 	bool bUpdateRotation = true;
 

@@ -19,6 +19,7 @@ public:
 	//TSubclassOf<UGameplayEffect> GameplayEffectClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EEffectApplicationPolicy EffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
+	// When an effect this actor applied is removed again.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EEffectRemovalPolicy EffectRemovalPolicy = EEffectRemovalPolicy::DoNotRemove;
 };
@@ -38,9 +39,11 @@ protected:
 	void ApplyEffectToTarget(AActor* TargetActor, FEffectData GameplayEffectClass);
 	void RemoveEffectFromTarget(AActor* TargetActor);
 	
+	// Destroys the actor after it has applied its effects once.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects")
 	bool bDestroyOnEffectApplication = false;
 	
+	// Lets the effects apply to actors tagged as enemies.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects")
 	bool bApplyEffectToEnemies = false;
 
@@ -49,11 +52,13 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnEndOverlap(AActor* TargetActor);
 	
+	// Effects the actor applies, each with its own apply and remove timing.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects")
 	TArray<FEffectData> Effects;
 	
 	//TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
 	
+	// Level the effects are applied at.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects")
 	float ActorLevel = 1.f; 
 private:
