@@ -23,6 +23,8 @@ ABaseProjectile::ABaseProjectile()
 	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 	Sphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	Sphere->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
+	Sphere->SetCollisionResponseToChannel(ECC_Destructible, ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	//Sphere->SetCollisionResponseToChannel(ECC_PawnOverlap, ECR_Overlap);
 	SetRootComponent(Sphere);
