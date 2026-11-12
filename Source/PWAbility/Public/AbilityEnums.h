@@ -30,9 +30,6 @@ enum class EEffectRemovalPolicy : uint8
 };
 
 
-/**
- * 
- */
 UCLASS()
 class PWABILITY_API UAbilityEnums : public UObject
 {

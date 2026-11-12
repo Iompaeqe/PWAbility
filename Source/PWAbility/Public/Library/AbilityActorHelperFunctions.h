@@ -7,9 +7,6 @@
 #include "AbilityActorHelperFunctions.generated.h"
 
 class UNiagaraComponent;
-/**
- * 
- */
 UCLASS()
 class PWABILITY_API UAbilityActorHelperFunctions : public UBlueprintFunctionLibrary
 {

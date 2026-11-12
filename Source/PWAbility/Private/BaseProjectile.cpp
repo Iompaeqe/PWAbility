@@ -76,7 +76,7 @@ bool ABaseProjectile::CanHitTarget(const AActor* OtherActor)
 	}
 
 	const float* LastTime = LastHitTimes.Find(OtherActor);
-	float Now = GetWorld()->GetTimeSeconds(); // todo: can be cached before hand.
+	float Now = GetWorld()->GetTimeSeconds();
 	return (!LastTime || Now - *LastTime >= TargetHitCooldown);
 }
 
