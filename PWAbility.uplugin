@@ -20,5 +20,24 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "Niagara",
+			"Enabled": true
+		},
+		{
+			"Name": "PWSharedTypes",
+			"Enabled": true
+		},
+		{
+			"Name": "PWContracts",
+			"Enabled": true
+		},
+		{
+			"Name": "PWTeams",
+			"Enabled": true,
+			"Optional": true
+		}
 	]
 }
