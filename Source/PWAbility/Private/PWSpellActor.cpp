@@ -11,7 +11,7 @@
 #include "Interface/PWProjectileInterface.h"
 #include "Net/UnrealNetwork.h"
 
-#include "TeamFunctions.h"
+#include "PWTeamFunctions.h"
 
 APWSpellActor::APWSpellActor(): SpellParams(nullptr)
 {
@@ -62,27 +62,27 @@ void APWSpellActor::SetSpellParams_Implementation(UPWSpellParams* Params)
 bool APWSpellActor::CheckForCollisionTarget(const AActor* OtherActor) const
 {
 	
-	return SpellParams && UTeamFunctions::MatchesMask(SpellParams->SourceAvatar, OtherActor, SpellParams->TargetCollisionMask);
+	return SpellParams && UPWTeamFunctions::MatchesMask(SpellParams->SourceAvatar, OtherActor, SpellParams->TargetCollisionMask);
 }
 
 bool APWSpellActor::CheckForEffectTarget(const AActor* OtherActor) const
 {
-	return SpellParams && UTeamFunctions::MatchesMask(SpellParams->SourceAvatar, OtherActor, SpellParams->TargetEffectMask);
+	return SpellParams && UPWTeamFunctions::MatchesMask(SpellParams->SourceAvatar, OtherActor, SpellParams->TargetEffectMask);
 }
 
 bool APWSpellActor::IsSelf(const AActor* OtherActor) const
 {
-	return SpellParams && UTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == ERelation::Self;
+	return SpellParams && UPWTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == EPWRelation::Self;
 }
 
 bool APWSpellActor::IsEnemy(const AActor* OtherActor) const
 {
-	return SpellParams && UTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == ERelation::Enemy;
+	return SpellParams && UPWTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == EPWRelation::Enemy;
 }
 
 bool APWSpellActor::IsAlly(const AActor* OtherActor) const
 {
-	return SpellParams && UTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == ERelation::Ally;
+	return SpellParams && UPWTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == EPWRelation::Ally;
 }
 
 bool APWSpellActor::IsSameCast(const AActor* OtherActor) const
