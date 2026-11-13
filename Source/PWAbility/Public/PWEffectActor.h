@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilityEnums.h"
 #include "GameFramework/Actor.h"
-#include "MyEffectActor.generated.h"
+#include "PWEffectActor.generated.h"
 
 class UAbilitySystemComponent;
 class UGameplayEffect;
@@ -25,12 +25,12 @@ public:
 };
 
 UCLASS()
-class PWABILITY_API AMyEffectActor : public AActor
+class PWABILITY_API APWEffectActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	AMyEffectActor();
+	APWEffectActor();
 
 protected:
 	virtual void BeginPlay() override;

@@ -1,23 +1,23 @@
 // Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 
-#include "MyEffectActor.h"
+#include "PWEffectActor.h"
 
 #include "AbilityEnums.h"
 
-AMyEffectActor::AMyEffectActor()
+APWEffectActor::APWEffectActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneComponent"));
 }
 
-void AMyEffectActor::BeginPlay()
+void APWEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void AMyEffectActor::ApplyEffectToTarget(AActor* TargetActor, FEffectData EffectData)
+void APWEffectActor::ApplyEffectToTarget(AActor* TargetActor, FEffectData EffectData)
 {
 	// if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemies) return;
 	//
@@ -44,7 +44,7 @@ void AMyEffectActor::ApplyEffectToTarget(AActor* TargetActor, FEffectData Effect
 	// }
 }
 
-void AMyEffectActor::RemoveEffectFromTarget(AActor* TargetActor)
+void APWEffectActor::RemoveEffectFromTarget(AActor* TargetActor)
 {
 	// UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	// if (!IsValid(TargetASC)) return;
@@ -65,7 +65,7 @@ void AMyEffectActor::RemoveEffectFromTarget(AActor* TargetActor)
 	// }
 }
 
-void AMyEffectActor::OnOverlap(AActor* TargetActor)
+void APWEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemies) return;
 	
@@ -78,7 +78,7 @@ void AMyEffectActor::OnOverlap(AActor* TargetActor)
 	}
 }
 
-void AMyEffectActor::OnEndOverlap(AActor* TargetActor)
+void APWEffectActor::OnEndOverlap(AActor* TargetActor)
 {
 	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemies) return;
 	

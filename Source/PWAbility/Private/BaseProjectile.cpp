@@ -95,13 +95,11 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		return;
 	}
 	if (OtherComp && OtherComp->Implements<UDontTriggerCollision>()) return;
-	// A volume that blocks neither characters nor projectiles, such as a trigger, is not something to hit.
-	if (OtherComp && OtherComp->GetCollisionResponseToChannel(ECC_Pawn) != ECR_Block && OtherComp->GetCollisionResponseToChannel(Sphere->GetCollisionObjectType()) != ECR_Block) return;
 	if (!CanHitTarget(OtherActor)) return;
 	if (!SpellParams || !HasReplicatedData()) return;
 
 	// The mask chooses between targets. Anything else is scenery, such as a wall, and always triggers the impact.
-	if (FindAffectable(OtherActor) && !CheckForCollisionTarget(OtherActor)) return;
+	if (IAffectable::Find(OtherActor) && !CheckForCollisionTarget(OtherActor)) return;
 
 	LastHitActor = OtherActor;
 	LastHitTimes.FindOrAdd(OtherActor) = GetWorld()->GetTimeSeconds();
@@ -167,8 +165,9 @@ void ABaseProjectile::SimpleApplyEffects(AActor* OtherActor)
 
 	if (HasAuthority())
 	{
-		if (CheckForEffectTarget(OtherActor))
-			ApplyEffects(OtherActor);
+		for (AActor* Target : GetImpactTargets(OtherActor))
+			if (CheckForEffectTarget(Target))
+				ApplyEffects(Target);
 	}
 }
 
@@ -178,7 +177,7 @@ void ABaseProjectile::ApplyEffects(AActor* OtherActor) const
 
 	SpellParams->ActorHit = OtherActor;
 	
-	if (UObject* Receiver = FindAffectable(OtherActor))
+	if (UObject* Receiver = IAffectable::Find(OtherActor))
 		IAffectable::Execute_ApplyEffects(Receiver, SpellParams);
 }
 

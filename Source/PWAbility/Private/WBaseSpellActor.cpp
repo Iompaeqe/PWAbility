@@ -4,6 +4,8 @@
 #include "WBaseSpellActor.h"
  
 #include "Ability/SpellParams.h"
+#include "Ability/PWSpellTargetProvider.h"
+#include "Components/PrimitiveComponent.h"
 #include "Ability/Affectable.h"
 #include "Ability/EffectReceiver.h"
 #include "Interface/Projectile.h"
@@ -100,12 +102,19 @@ bool AWBaseSpellActor::IsNoCollision(const AActor* OtherActor)
 	return OtherActor->Implements<UNoCollision>();
 }
 
-UObject* AWBaseSpellActor::FindAffectable(AActor* OtherActor)
+TArray<AActor*> AWBaseSpellActor::GetImpactTargets(AActor* HitActor) const
 {
-	if (!OtherActor) return nullptr;
+	TArray<AActor*> Targets;
+	if (const IPWSpellTargetProvider* Resolver = SpellParams ? Cast<IPWSpellTargetProvider>(SpellParams->TargetResolver) : nullptr)
+	{
+		const FHitResult Hit = HitActor ? FHitResult(HitActor, Cast<UPrimitiveComponent>(HitActor->GetRootComponent()), GetActorLocation(), -GetActorForwardVector()) : FHitResult();
+		Resolver->GetImpactTargets(this, SpellParams, Hit, Targets);
+		return Targets;
+	}
 
-	UObject* Receiver = OtherActor->Implements<UEffectReceiver>() ? IEffectReceiver::Execute_GetEffectReceiver(OtherActor) : OtherActor;
-	return Receiver && Receiver->Implements<UAffectable>() ? Receiver : nullptr;
+	if (HitActor)
+		Targets.Add(HitActor);
+	return Targets;
 }
 
 bool AWBaseSpellActor::IsDontTriggerCollision(const AActor* OtherActor)

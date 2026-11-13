@@ -60,8 +60,9 @@ protected:
 	static bool IsNoCollision(const AActor* OtherActor);
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	static bool IsDontTriggerCollision(const AActor* OtherActor);
-	// The object that takes effects for an actor, or null when it is scenery such as a wall.
-	static UObject* FindAffectable(AActor* OtherActor);
+	// Who an impact here affects: the ability's target resolver decides when the spell params carry one, otherwise only the actor that was hit.
+	UFUNCTION(BlueprintCallable, Category = "BaseSpell|Target")
+	TArray<AActor*> GetImpactTargets(AActor* HitActor) const;
 	
 
 private:
