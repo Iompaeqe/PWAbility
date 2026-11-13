@@ -45,6 +45,7 @@ public class PWAbility : ModuleRules
 			);
 		
 		PrivateDependencyModuleNames.Add("PWTeams");
+		PrivateDependencyModuleNames.Add("GameplayTags");
 		
 		
 		DynamicallyLoadedModuleNames.AddRange(

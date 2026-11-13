@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Relationships/PWTeamRelationship.h"
 #include "CoreMinimal.h"
 #include "Ability/PWSpellParamsInterface.h"
 #include "GameFramework/Actor.h"
@@ -52,6 +53,12 @@ protected:
 	virtual bool IsEnemy(const AActor* OtherActor) const;
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	virtual bool IsAlly(const AActor* OtherActor) const;
+	// Attributed to the same participant as the caster, such as the caster's own summon.
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
+	virtual bool IsSameOwner(const AActor* OtherActor) const;
+	// How the caster relates to an actor. Still answers after the caster is gone.
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
+	FPWTeamRelationship GetRelationshipTo(const AActor* OtherActor) const;
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	virtual bool IsSameCast(const AActor* OtherActor) const;
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")

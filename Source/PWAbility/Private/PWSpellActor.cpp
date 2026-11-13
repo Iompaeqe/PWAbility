@@ -11,7 +11,7 @@
 #include "Interface/PWProjectileInterface.h"
 #include "Net/UnrealNetwork.h"
 
-#include "PWTeamFunctions.h"
+#include "Core/PWTeamsSubsystem.h"
 
 APWSpellActor::APWSpellActor(): SpellParams(nullptr)
 {
@@ -61,28 +61,42 @@ void APWSpellActor::SetSpellParams_Implementation(UPWSpellParams* Params)
 
 bool APWSpellActor::CheckForCollisionTarget(const AActor* OtherActor) const
 {
-	
-	return SpellParams && UPWTeamFunctions::MatchesMask(SpellParams->SourceAvatar, OtherActor, SpellParams->TargetCollisionMask);
+	const UPWTeamsSubsystem* Teams = UPWTeamsSubsystem::Get(this);
+	return SpellParams && Teams && Teams->MatchesFilter(SpellParams->GetSourceIdentity(), UPWTeamsSubsystem::GetIdentity(OtherActor), SpellParams->CollisionFilter);
 }
 
 bool APWSpellActor::CheckForEffectTarget(const AActor* OtherActor) const
 {
-	return SpellParams && UPWTeamFunctions::MatchesMask(SpellParams->SourceAvatar, OtherActor, SpellParams->TargetEffectMask);
+	// Each effect group carries its own filter and is checked where the effects are applied.
+	return SpellParams != nullptr;
+}
+
+FPWTeamRelationship APWSpellActor::GetRelationshipTo(const AActor* OtherActor) const
+{
+	const UPWTeamsSubsystem* Teams = UPWTeamsSubsystem::Get(this);
+	return SpellParams && Teams ? Teams->GetRelationship(SpellParams->GetSourceIdentity(), UPWTeamsSubsystem::GetIdentity(OtherActor)) : FPWTeamRelationship();
 }
 
 bool APWSpellActor::IsSelf(const AActor* OtherActor) const
 {
-	return SpellParams && UPWTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == EPWRelation::Self;
+	return GetRelationshipTo(OtherActor).bSameActor;
 }
 
 bool APWSpellActor::IsEnemy(const AActor* OtherActor) const
 {
-	return SpellParams && UPWTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == EPWRelation::Enemy;
+	return GetRelationshipTo(OtherActor).Attitude == EPWTeamAttitude::Hostile;
 }
 
 bool APWSpellActor::IsAlly(const AActor* OtherActor) const
 {
-	return SpellParams && UPWTeamFunctions::GetRelation(SpellParams->SourceAvatar, OtherActor) == EPWRelation::Ally;
+	const FPWTeamRelationship Relationship = GetRelationshipTo(OtherActor);
+	return Relationship.Attitude == EPWTeamAttitude::Friendly && !Relationship.bSameActor;
+}
+
+bool APWSpellActor::IsSameOwner(const AActor* OtherActor) const
+{
+	const FPWTeamRelationship Relationship = GetRelationshipTo(OtherActor);
+	return Relationship.bSameOwner && !Relationship.bSameActor;
 }
 
 bool APWSpellActor::IsSameCast(const AActor* OtherActor) const
