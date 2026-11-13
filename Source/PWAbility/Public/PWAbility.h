@@ -4,8 +4,6 @@
 
 #include "Modules/ModuleManager.h"
 
-#define ECC_Projectile ECollisionChannel::ECC_GameTraceChannel1
-
 class FPWAbilityModule : public IModuleInterface
 {
 public:

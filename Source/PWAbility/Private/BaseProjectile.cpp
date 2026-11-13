@@ -17,15 +17,14 @@
 ABaseProjectile::ABaseProjectile()
 {
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
-	Sphere->SetCollisionObjectType(ECC_Projectile);
+	Sphere->SetCollisionObjectType(ECC_WorldDynamic);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Sphere->SetCollisionResponseToAllChannels(ECR_Ignore);
-	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
-	Sphere->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	Sphere->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Overlap);
+	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_Destructible, ECR_Overlap);
-	Sphere->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	//Sphere->SetCollisionResponseToChannel(ECC_PawnOverlap, ECR_Overlap);
 	SetRootComponent(Sphere);
 
@@ -40,6 +39,7 @@ void ABaseProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ABaseProjectile::OnOverlap);
+	Sphere->OnComponentHit.AddDynamic(this, &ABaseProjectile::OnBlockingHit);
 	LoopingSound = UGameplayStatics::SpawnSoundAttached(ActiveSoundLoop, GetRootComponent());
 }
 
@@ -48,6 +48,7 @@ void ABaseProjectile::Destroyed()
 	Super::Destroyed();
 
 	Sphere->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseProjectile::OnOverlap);
+	Sphere->OnComponentHit.RemoveDynamic(this, &ABaseProjectile::OnBlockingHit);
 
 	if (LoopingSound)
 	{
@@ -93,9 +94,14 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 			HandleProjectileCollision(OtherActor);
 		return;
 	}
+	if (OtherComp && OtherComp->Implements<UDontTriggerCollision>()) return;
+	// A volume that blocks neither characters nor projectiles, such as a trigger, is not something to hit.
+	if (OtherComp && OtherComp->GetCollisionResponseToChannel(ECC_Pawn) != ECR_Block && OtherComp->GetCollisionResponseToChannel(Sphere->GetCollisionObjectType()) != ECR_Block) return;
 	if (!CanHitTarget(OtherActor)) return;
 	if (!SpellParams || !HasReplicatedData()) return;
-	if (!CheckForCollisionTarget(OtherActor)) return;
+
+	// The mask chooses between targets. Anything else is scenery, such as a wall, and always triggers the impact.
+	if (FindAffectable(OtherActor) && !CheckForCollisionTarget(OtherActor)) return;
 
 	LastHitActor = OtherActor;
 	LastHitTimes.FindOrAdd(OtherActor) = GetWorld()->GetTimeSeconds();
@@ -105,6 +111,12 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	OnProjectileOverlap(OtherActor);
+}
+
+void ABaseProjectile::OnBlockingHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	// A projectile set to block something impacts on it the same way as on an overlap.
+	OnOverlap(HitComponent, OtherActor, OtherComp, 0, true, Hit);
 }
 
 void ABaseProjectile::OnRep_SpellParams()
@@ -166,8 +178,7 @@ void ABaseProjectile::ApplyEffects(AActor* OtherActor) const
 
 	SpellParams->ActorHit = OtherActor;
 	
-	UObject* Receiver = OtherActor->GetClass()->ImplementsInterface(UEffectReceiver::StaticClass())? IEffectReceiver::Execute_GetEffectReceiver(OtherActor) : OtherActor;
-	if (Receiver && Receiver->GetClass()->ImplementsInterface(UAffectable::StaticClass()))
+	if (UObject* Receiver = FindAffectable(OtherActor))
 		IAffectable::Execute_ApplyEffects(Receiver, SpellParams);
 }
 

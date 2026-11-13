@@ -46,6 +46,7 @@ protected:
 	// Number of hits after which the projectile is destroyed; 0 never destroys it on hit.
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	int8 DestroyOnHit = 1;
+
 	// Allows hitting the same actor twice in a row, for piercing or bouncing projectiles.
 	UPROPERTY(EditAnywhere, Category = "Projectile")
 	bool bCanHitTheSameTarget = false;
@@ -85,6 +86,8 @@ protected:
 
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnBlockingHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 	//Effects
 	UFUNCTION(BlueprintCallable, Category = "Projectile|Effects")

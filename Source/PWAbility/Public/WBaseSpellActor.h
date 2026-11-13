@@ -60,6 +60,8 @@ protected:
 	static bool IsNoCollision(const AActor* OtherActor);
 	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "BaseSpell|Target")
 	static bool IsDontTriggerCollision(const AActor* OtherActor);
+	// The object that takes effects for an actor, or null when it is scenery such as a wall.
+	static UObject* FindAffectable(AActor* OtherActor);
 	
 
 private:

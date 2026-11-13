@@ -4,6 +4,8 @@
 #include "WBaseSpellActor.h"
  
 #include "Ability/SpellParams.h"
+#include "Ability/Affectable.h"
+#include "Ability/EffectReceiver.h"
 #include "Interface/Projectile.h"
 #include "Net/UnrealNetwork.h"
 
@@ -96,6 +98,14 @@ bool AWBaseSpellActor::IsActorProjectile(const AActor* OtherActor)
 bool AWBaseSpellActor::IsNoCollision(const AActor* OtherActor)
 {
 	return OtherActor->Implements<UNoCollision>();
+}
+
+UObject* AWBaseSpellActor::FindAffectable(AActor* OtherActor)
+{
+	if (!OtherActor) return nullptr;
+
+	UObject* Receiver = OtherActor->Implements<UEffectReceiver>() ? IEffectReceiver::Execute_GetEffectReceiver(OtherActor) : OtherActor;
+	return Receiver && Receiver->Implements<UAffectable>() ? Receiver : nullptr;
 }
 
 bool AWBaseSpellActor::IsDontTriggerCollision(const AActor* OtherActor)
