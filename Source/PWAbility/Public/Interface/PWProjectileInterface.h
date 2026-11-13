@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "Ability/SpellCollision.h"
+#include "Ability/PWSpellCollision.h"
 #include "PWProjectileInterface.generated.h"
 
 UINTERFACE()

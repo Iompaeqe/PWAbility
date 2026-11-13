@@ -3,7 +3,7 @@
 
 #include "PWSplineProjectile.h"
 
-#include "Ability/SpellParams.h"
+#include "Ability/PWSpellParams.h"
 #include "Components/PWProjectileMovementComponent.h"
 #include "Components/SplineComponent.h"
 

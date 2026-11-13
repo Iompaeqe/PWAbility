@@ -3,11 +3,11 @@
 
 #include "PWSpellActor.h"
  
-#include "Ability/SpellParams.h"
+#include "Ability/PWSpellParams.h"
 #include "Ability/PWSpellTargetProvider.h"
 #include "Components/PrimitiveComponent.h"
-#include "Ability/Affectable.h"
-#include "Ability/EffectReceiver.h"
+#include "Ability/PWAffectable.h"
+#include "Ability/PWEffectReceiver.h"
 #include "Interface/PWProjectileInterface.h"
 #include "Net/UnrealNetwork.h"
 
@@ -50,7 +50,7 @@ void APWSpellActor::OnRep_SpellParams()
 	bHasReplicatedData = SpellParams != nullptr;
 }
 
-void APWSpellActor::SetSpellParams_Implementation(USpellParams* Params)
+void APWSpellActor::SetSpellParams_Implementation(UPWSpellParams* Params)
 {
 	SpellParams = Params;
 	if (!SpellParams || !HasAuthority()) return;
@@ -99,7 +99,7 @@ bool APWSpellActor::IsActorProjectile(const AActor* OtherActor)
 
 bool APWSpellActor::IsNoCollision(const AActor* OtherActor)
 {
-	return OtherActor->Implements<UNoCollision>();
+	return OtherActor->Implements<UPWNoCollision>();
 }
 
 TArray<AActor*> APWSpellActor::GetImpactTargets(AActor* HitActor) const
@@ -119,7 +119,7 @@ TArray<AActor*> APWSpellActor::GetImpactTargets(AActor* HitActor) const
 
 bool APWSpellActor::IsDontTriggerCollision(const AActor* OtherActor)
 {
-	return OtherActor->Implements<UDontTriggerCollision>();
+	return OtherActor->Implements<UPWDontTriggerCollision>();
 }
 
 

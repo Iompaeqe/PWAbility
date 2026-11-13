@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "PWAbilityEnums.h"
 #include "PWSpellActor.h"
-#include "Ability/SpellParams.h"
+#include "Ability/PWSpellParams.h"
 #include "GameFramework/Actor.h"
 #include "Interface/PWProjectileInterface.h"
 #include "PWProjectile.generated.h"

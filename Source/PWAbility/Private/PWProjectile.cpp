@@ -4,15 +4,15 @@
 #include "PWProjectile.h"
 
 #include "PWAbilityEnums.h"
-#include "Ability/SpellParams.h"
+#include "Ability/PWSpellParams.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/PWProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "PWAbility.h"
-#include "Ability/Affectable.h"
-#include "Ability/EffectReceiver.h"
+#include "Ability/PWAffectable.h"
+#include "Ability/PWEffectReceiver.h"
 
 APWProjectile::APWProjectile()
 {
@@ -94,12 +94,12 @@ void APWProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 			HandleProjectileCollision(OtherActor);
 		return;
 	}
-	if (OtherComp && OtherComp->Implements<UDontTriggerCollision>()) return;
+	if (OtherComp && OtherComp->Implements<UPWDontTriggerCollision>()) return;
 	if (!CanHitTarget(OtherActor)) return;
 	if (!SpellParams || !HasReplicatedData()) return;
 
 	// The mask chooses between targets. Anything else is scenery, such as a wall, and always triggers the impact.
-	if (IAffectable::Find(OtherActor) && !CheckForCollisionTarget(OtherActor)) return;
+	if (IPWAffectable::Find(OtherActor) && !CheckForCollisionTarget(OtherActor)) return;
 
 	LastHitActor = OtherActor;
 	LastHitTimes.FindOrAdd(OtherActor) = GetWorld()->GetTimeSeconds();
@@ -177,8 +177,8 @@ void APWProjectile::ApplyEffects(AActor* OtherActor) const
 
 	SpellParams->ActorHit = OtherActor;
 	
-	if (UObject* Receiver = IAffectable::Find(OtherActor))
-		IAffectable::Execute_ApplyEffects(Receiver, SpellParams);
+	if (UObject* Receiver = IPWAffectable::Find(OtherActor))
+		IPWAffectable::Execute_ApplyEffects(Receiver, SpellParams);
 }
 
 void APWProjectile::HandleImpactEffects()

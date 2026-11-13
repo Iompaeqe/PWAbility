@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "PWSpellActor.generated.h"
 
-class USpellParams;
+class UPWSpellParams;
 enum EPrecastDecalType : uint8;
 
 UCLASS()
@@ -28,14 +28,14 @@ public:
 	// void OnGamePhaseChanged(EGamePhase NewPhase);
 	
 	UPROPERTY(BlueprintReadWrite, ReplicatedUsing=OnRep_SpellParams)
-	USpellParams* SpellParams;
+	UPWSpellParams* SpellParams;
 	UFUNCTION()
 	virtual void OnRep_SpellParams();
 
 	UFUNCTION(BlueprintPure, Category = "BaseSpell")
 	bool HasReplicatedData() const { return HasAuthority() || bHasReplicatedData; }
 
-	virtual void SetSpellParams_Implementation(USpellParams* Params) override;
+	virtual void SetSpellParams_Implementation(UPWSpellParams* Params) override;
 	
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "BaseSpell")
