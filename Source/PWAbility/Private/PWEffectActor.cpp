@@ -3,7 +3,7 @@
 
 #include "PWEffectActor.h"
 
-#include "AbilityEnums.h"
+#include "PWAbilityEnums.h"
 
 APWEffectActor::APWEffectActor()
 {
@@ -17,7 +17,7 @@ void APWEffectActor::BeginPlay()
 	Super::BeginPlay();
 }
 
-void APWEffectActor::ApplyEffectToTarget(AActor* TargetActor, FEffectData EffectData)
+void APWEffectActor::ApplyEffectToTarget(AActor* TargetActor, FPWEffectData EffectData)
 {
 	// if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemies) return;
 	//
@@ -33,7 +33,7 @@ void APWEffectActor::ApplyEffectToTarget(AActor* TargetActor, FEffectData Effect
 	// 	*EffectSpecHandle.Data.Get());
 	//
 	// const bool bIsInfinite = EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
-	// if (bIsInfinite && EffectData.EffectRemovalPolicy != EEffectRemovalPolicy::DoNotRemove)
+	// if (bIsInfinite && EffectData.EffectRemovalPolicy != EPWEffectRemovalPolicy::DoNotRemove)
 	// {
 	// 	ActiveEffectHandles.Add(ActiveEffectHandle, TargetASC);
 	// }
@@ -69,9 +69,9 @@ void APWEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemies) return;
 	
-	for (FEffectData Effect : Effects)
+	for (FPWEffectData Effect : Effects)
 	{
-		if (Effect.EffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+		if (Effect.EffectApplicationPolicy == EPWEffectApplicationPolicy::ApplyOnOverlap)
 		{
 			ApplyEffectToTarget(TargetActor,Effect);
 		}
@@ -82,17 +82,17 @@ void APWEffectActor::OnEndOverlap(AActor* TargetActor)
 {
 	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemies) return;
 	
-	for (FEffectData Effect : Effects)
+	for (FPWEffectData Effect : Effects)
 	{
-		if (Effect.EffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+		if (Effect.EffectApplicationPolicy == EPWEffectApplicationPolicy::ApplyOnEndOverlap)
 		{
 			ApplyEffectToTarget(TargetActor,Effect);
 		}
 	}
 
-	for (FEffectData Effect : Effects)
+	for (FPWEffectData Effect : Effects)
 	{
-		if (Effect.EffectRemovalPolicy == EEffectRemovalPolicy::RemoveOnEndOverlap)
+		if (Effect.EffectRemovalPolicy == EPWEffectRemovalPolicy::RemoveOnEndOverlap)
 		{
 			RemoveEffectFromTarget(TargetActor);
 		}

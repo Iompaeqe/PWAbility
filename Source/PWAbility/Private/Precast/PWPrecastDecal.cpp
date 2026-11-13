@@ -1,24 +1,24 @@
 // Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 
-#include "Precast/PrecastDecal.h"
+#include "Precast/PWPrecastDecal.h"
 
 #include "Components/DecalComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
-APrecastDecal::APrecastDecal()
+APWPrecastDecal::APWPrecastDecal()
 {
 	DecalComponent = CreateDefaultSubobject<UDecalComponent>(TEXT("DecalComponent"));
 	DecalComponent->SetupAttachment(GetRootComponent());
 }
 
-void APrecastDecal::SetRadius(const float Radius) const
+void APWPrecastDecal::SetRadius(const float Radius) const
 {
 	DecalComponent->DecalSize = FVector(30, Radius, Radius);
 }
 
-void APrecastDecal::SetLineEndpoints(const FVector& Start, const FVector& End, const float Range) const
+void APWPrecastDecal::SetLineEndpoints(const FVector& Start, const FVector& End, const float Range) const
 {
 	if (DecalMaterialInstance)
 	{

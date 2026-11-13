@@ -5,15 +5,15 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "Ability/SpellCollision.h"
-#include "Projectile.generated.h"
+#include "PWProjectile.generated.h"
 
 UINTERFACE()
-class UProjectile : public UInterface
+class UPWProjectile : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class PWABILITY_API IProjectile
+class PWABILITY_API IPWProjectile
 {
 	GENERATED_BODY()
 };

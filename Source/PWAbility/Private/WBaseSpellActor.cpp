@@ -8,7 +8,7 @@
 #include "Components/PrimitiveComponent.h"
 #include "Ability/Affectable.h"
 #include "Ability/EffectReceiver.h"
-#include "Interface/Projectile.h"
+#include "Interface/PWProjectile.h"
 #include "Net/UnrealNetwork.h"
 
 #include "TeamFunctions.h"
@@ -94,7 +94,7 @@ bool AWBaseSpellActor::IsSameCast(const AActor* OtherActor) const
 
 bool AWBaseSpellActor::IsActorProjectile(const AActor* OtherActor)
 {
-	return OtherActor->Implements<UProjectile>();
+	return OtherActor->Implements<UPWProjectile>();
 }
 
 bool AWBaseSpellActor::IsNoCollision(const AActor* OtherActor)

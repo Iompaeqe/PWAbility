@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
-#include "SphereNiagaraComponent.generated.h"
+#include "PWSphereNiagaraComponent.generated.h"
 
 class USphereComponent;
 class UNiagaraComponent;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), BlueprintType, Blueprintable)
-class PWABILITY_API USphereNiagaraComponent : public USceneComponent
+class PWABILITY_API UPWSphereNiagaraComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
 public:
-	USphereNiagaraComponent();
+	UPWSphereNiagaraComponent();
 
 protected:
 

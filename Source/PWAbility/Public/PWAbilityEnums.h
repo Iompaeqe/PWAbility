@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "AbilityEnums.generated.h"
+#include "PWAbilityEnums.generated.h"
 
 UENUM(BlueprintType)
-enum class EProjectileVsProjectilePolicy : uint8
+enum class EPWProjectileVsProjectilePolicy : uint8
 {
 	Ignore,
 	DestroySelf,
@@ -15,7 +15,7 @@ enum class EProjectileVsProjectilePolicy : uint8
 };
 
 UENUM(BlueprintType)
-enum class EEffectApplicationPolicy : uint8
+enum class EPWEffectApplicationPolicy : uint8
 {
 	ApplyOnOverlap,
 	ApplyOnEndOverlap,
@@ -23,7 +23,7 @@ enum class EEffectApplicationPolicy : uint8
 };
 
 UENUM(BlueprintType)
-enum class EEffectRemovalPolicy : uint8
+enum class EPWEffectRemovalPolicy : uint8
 {
 	RemoveOnEndOverlap,
 	DoNotRemove
@@ -31,7 +31,7 @@ enum class EEffectRemovalPolicy : uint8
 
 
 UCLASS()
-class PWABILITY_API UAbilityEnums : public UObject
+class PWABILITY_API UPWAbilityEnums : public UObject
 {
 	GENERATED_BODY()
 };

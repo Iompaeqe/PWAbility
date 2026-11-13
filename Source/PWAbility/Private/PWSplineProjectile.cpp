@@ -1,14 +1,14 @@
 // Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 
-#include "SplineMovementProjectile.h"
+#include "PWSplineProjectile.h"
 
 #include "Ability/SpellParams.h"
 #include "Components/WProjectileMovementComponent.h"
 #include "Components/SplineComponent.h"
 
 
-ASplineMovementProjectile::ASplineMovementProjectile()
+APWSplineProjectile::APWSplineProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -16,7 +16,7 @@ ASplineMovementProjectile::ASplineMovementProjectile()
 	SplineComponent->SetupAttachment(RootComponent);
 }
 
-void ASplineMovementProjectile::EndSplineMovement(const bool ContinueMovement)
+void APWSplineProjectile::EndSplineMovement(const bool ContinueMovement)
 {
 	bIsSplineStopped = true;
 	if (ContinueMovement)
@@ -31,7 +31,7 @@ void ASplineMovementProjectile::EndSplineMovement(const bool ContinueMovement)
 	SplineMovementEnded();
 }
 
-void ASplineMovementProjectile::EndSplineMovementWithBounce(const FVector PointOfOrigin)
+void APWSplineProjectile::EndSplineMovementWithBounce(const FVector PointOfOrigin)
 {
 	bIsSplineStopped = true;
 	ProjectileMovement->Activate();
@@ -45,7 +45,7 @@ void ASplineMovementProjectile::EndSplineMovementWithBounce(const FVector PointO
 	SplineMovementEnded();
 }
 
-void ASplineMovementProjectile::BeginPlay()
+void APWSplineProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -68,7 +68,7 @@ void ASplineMovementProjectile::BeginPlay()
 	}
 }
 
-void ASplineMovementProjectile::Tick(const float DeltaSeconds)
+void APWSplineProjectile::Tick(const float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
@@ -115,7 +115,7 @@ void ASplineMovementProjectile::Tick(const float DeltaSeconds)
 	}
 }
 
-void ASplineMovementProjectile::Destroyed()
+void APWSplineProjectile::Destroyed()
 {
 	Super::Destroyed();
 

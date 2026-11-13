@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PrecastDecal.generated.h"
+#include "PWPrecastDecal.generated.h"
 
 UCLASS()
-class PWABILITY_API APrecastDecal : public AActor
+class PWABILITY_API APWPrecastDecal : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	APrecastDecal();
+	APWPrecastDecal();
 	
 	void SetRadius(float Radius) const;
 	void SetLineEndpoints(const FVector& Start, const FVector& End, const float Range) const;

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilityEnums.h"
+#include "PWAbilityEnums.h"
 #include "GameFramework/Actor.h"
 #include "PWEffectActor.generated.h"
 
@@ -11,17 +11,17 @@ class UAbilitySystemComponent;
 class UGameplayEffect;
 
 USTRUCT(BlueprintType)
-struct FEffectData
+struct FPWEffectData
 {
 	GENERATED_BODY()
 public:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//TSubclassOf<UGameplayEffect> GameplayEffectClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EEffectApplicationPolicy EffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
+	EPWEffectApplicationPolicy EffectApplicationPolicy = EPWEffectApplicationPolicy::DoNotApply;
 	// When an effect this actor applied is removed again.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EEffectRemovalPolicy EffectRemovalPolicy = EEffectRemovalPolicy::DoNotRemove;
+	EPWEffectRemovalPolicy EffectRemovalPolicy = EPWEffectRemovalPolicy::DoNotRemove;
 };
 
 UCLASS()
@@ -36,7 +36,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	void ApplyEffectToTarget(AActor* TargetActor, FEffectData GameplayEffectClass);
+	void ApplyEffectToTarget(AActor* TargetActor, FPWEffectData GameplayEffectClass);
 	void RemoveEffectFromTarget(AActor* TargetActor);
 	
 	// Destroys the actor after it has applied its effects once.
@@ -54,7 +54,7 @@ protected:
 	
 	// Effects the actor applies, each with its own apply and remove timing.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects")
-	TArray<FEffectData> Effects;
+	TArray<FPWEffectData> Effects;
 	
 	//TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent*> ActiveEffectHandles;
 	

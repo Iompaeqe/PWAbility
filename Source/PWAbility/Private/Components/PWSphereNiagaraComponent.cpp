@@ -1,13 +1,13 @@
 // Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 
-#include "Components/SphereNiagaraComponent.h"
+#include "Components/PWSphereNiagaraComponent.h"
 
 #include "NiagaraComponent.h"
 #include "Components/SphereComponent.h"
 
 
-USphereNiagaraComponent::USphereNiagaraComponent()
+UPWSphereNiagaraComponent::UPWSphereNiagaraComponent()
 {
 	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
 	NiagaraComponent->SetupAttachment(this);

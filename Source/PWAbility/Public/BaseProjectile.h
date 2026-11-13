@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilityEnums.h"
+#include "PWAbilityEnums.h"
 #include "WBaseSpellActor.h"
 #include "Ability/SpellParams.h"
 #include "GameFramework/Actor.h"
-#include "Interface/Projectile.h"
+#include "Interface/PWProjectile.h"
 #include "BaseProjectile.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnProjectileOverlapDelegate, AActor*, OtherActor);
@@ -17,7 +17,7 @@ class UNiagaraSystem;
 class USphereComponent;
 
 UCLASS(Blueprintable,BlueprintType)
-class PWABILITY_API ABaseProjectile : public AWBaseSpellActor, public IProjectile
+class PWABILITY_API ABaseProjectile : public AWBaseSpellActor, public IPWProjectile
 {
 	GENERATED_BODY()
 
@@ -57,7 +57,7 @@ protected:
 private:
 	// What happens when this projectile meets another one.
 	UPROPERTY(EditAnywhere, Category = "Projectile")
-	EProjectileVsProjectilePolicy ProjectileVsProjectilePolicy = EProjectileVsProjectilePolicy::DestroySelf;
+	EPWProjectileVsProjectilePolicy ProjectileVsProjectilePolicy = EPWProjectileVsProjectilePolicy::DestroySelf;
 	// Niagara effect played where the projectile hits.
 	UPROPERTY(EditAnywhere, Category = "Projectile|Effects")
 	TObjectPtr<UNiagaraSystem> ImpactEffect;

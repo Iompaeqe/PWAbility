@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "BaseProjectile.h"
-#include "SplineMovementProjectile.generated.h"
+#include "PWSplineProjectile.generated.h"
 
 class USplineComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSplinePathCompleteDelegate);
 
 UCLASS(BlueprintType, Blueprintable)
-class PWABILITY_API ASplineMovementProjectile : public ABaseProjectile
+class PWABILITY_API APWSplineProjectile : public ABaseProjectile
 {
 	GENERATED_BODY()
 
 public:
-	ASplineMovementProjectile();
+	APWSplineProjectile();
 
 	UPROPERTY(BlueprintAssignable)
 	FSplinePathCompleteDelegate OnSplinePathComplete;

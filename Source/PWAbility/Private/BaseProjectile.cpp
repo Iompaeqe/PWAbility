@@ -3,7 +3,7 @@
 
 #include "BaseProjectile.h"
 
-#include "AbilityEnums.h"
+#include "PWAbilityEnums.h"
 #include "Ability/SpellParams.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
@@ -135,15 +135,15 @@ void ABaseProjectile::HandleProjectileCollision(const AActor* OtherActor)
 {
 	switch (ProjectileVsProjectilePolicy)
 	 {
-	 case EProjectileVsProjectilePolicy::Ignore:
+	 case EPWProjectileVsProjectilePolicy::Ignore:
 	 	return;
 	
-	 case EProjectileVsProjectilePolicy::DestroySelf:
+	 case EPWProjectileVsProjectilePolicy::DestroySelf:
 	 	HandleImpactEffects();
 	 	if (HasAuthority()) Destroy();
 	 	return;
 	
-	 case EProjectileVsProjectilePolicy::BounceOff:
+	 case EPWProjectileVsProjectilePolicy::BounceOff:
 	 	Bounce(OtherActor->GetActorLocation());
 	 	return;
 	 }
