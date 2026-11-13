@@ -13,6 +13,7 @@ class PWABILITY_API UAbilityActorHelperFunctions : public UBlueprintFunctionLibr
 	GENERATED_BODY()
 
 public:
+	// Retires a spent spell actor: turns off collision, stops it, hides it and destroys it after the delay. With Hide Actor off it stays in view while its effect fades.
 	UFUNCTION(BlueprintCallable, Category = "AbilityActor")
-	static void CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* ProjectileNiagara, float Delay = 0);
+	static void CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* ProjectileNiagara, float Delay = 0, bool bHideActor = true);
 };

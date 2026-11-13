@@ -4,15 +4,39 @@
 #include "Library/AbilityActorHelperFunctions.h"
 
 #include "NiagaraComponent.h"
+#include "GameFramework/MovementComponent.h"
 
-void UAbilityActorHelperFunctions::CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* ProjectileNiagara, float Delay)
+void UAbilityActorHelperFunctions::CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* ProjectileNiagara, float Delay, bool bHideActor)
 {
-	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	ProjectileNiagara->Deactivate();
-	ProjectileNiagara->SetAutoDestroy(true);
-	FTimerHandle TimerHandle;
-	ProjectileNiagara->GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, [ProjectileNiagara]()
+	AActor* Owner = CollisionComponent ? CollisionComponent->GetOwner() : ProjectileNiagara ? ProjectileNiagara->GetOwner() : nullptr;
+	if (!Owner)
+		return;
+
+	if (CollisionComponent)
+		CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (ProjectileNiagara)
 	{
-		ProjectileNiagara->GetOwner()->Destroy();
+		ProjectileNiagara->Deactivate();
+		ProjectileNiagara->SetAutoDestroy(true);
+	}
+	if (UMovementComponent* Movement = Owner->FindComponentByClass<UMovementComponent>())
+	{
+		Movement->StopMovementImmediately();
+		Movement->Deactivate();
+	}
+	if (bHideActor)
+		Owner->SetActorHiddenInGame(true);
+
+	if (Delay <= 0.f)
+	{
+		Owner->Destroy();
+		return;
+	}
+
+	FTimerHandle TimerHandle;
+	Owner->GetWorldTimerManager().SetTimer(TimerHandle, [WeakOwner = TWeakObjectPtr<AActor>(Owner)]()
+	{
+		if (WeakOwner.IsValid())
+			WeakOwner->Destroy();
 	}, Delay, false);
 }
