@@ -4,7 +4,7 @@
 #include "PWSplineProjectile.h"
 
 #include "Ability/SpellParams.h"
-#include "Components/WProjectileMovementComponent.h"
+#include "Components/PWProjectileMovementComponent.h"
 #include "Components/SplineComponent.h"
 
 

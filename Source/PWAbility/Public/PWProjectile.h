@@ -4,20 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "PWAbilityEnums.h"
-#include "WBaseSpellActor.h"
+#include "PWSpellActor.h"
 #include "Ability/SpellParams.h"
 #include "GameFramework/Actor.h"
-#include "Interface/PWProjectile.h"
-#include "BaseProjectile.generated.h"
+#include "Interface/PWProjectileInterface.h"
+#include "PWProjectile.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnProjectileOverlapDelegate, AActor*, OtherActor);
 
-class UWProjectileMovementComponent;
+class UPWProjectileMovementComponent;
 class UNiagaraSystem;
 class USphereComponent;
 
 UCLASS(Blueprintable,BlueprintType)
-class PWABILITY_API ABaseProjectile : public AWBaseSpellActor, public IPWProjectile
+class PWABILITY_API APWProjectile : public APWSpellActor, public IPWProjectileInterface
 {
 	GENERATED_BODY()
 
@@ -28,7 +28,7 @@ public: // ---- PROPERTIES
 protected:
 	// Movement component that flies the projectile.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile|Movement")
-	TObjectPtr<UWProjectileMovementComponent> ProjectileMovement;
+	TObjectPtr<UPWProjectileMovementComponent> ProjectileMovement;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> Sphere;
 	
@@ -71,7 +71,7 @@ private:
 	TObjectPtr<UAudioComponent> LoopingSound;
 	
 public: // ---- FUNCTIONS
-	ABaseProjectile();
+	APWProjectile();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Projectile")
 	void Reflect(AActor* ActorReflectedBy);
@@ -123,7 +123,7 @@ protected:
 private:
 
 public: // GETTERS
-	UWProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+	UPWProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 	UFUNCTION(BlueprintImplementableEvent, BlueprintPure, Category = "Projectile|Data")
 	float CalculateLifeTime();
 

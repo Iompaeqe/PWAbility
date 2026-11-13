@@ -5,18 +5,18 @@
 #include "CoreMinimal.h"
 #include "Ability/PWSpellParamsInterface.h"
 #include "GameFramework/Actor.h"
-#include "WBaseSpellActor.generated.h"
+#include "PWSpellActor.generated.h"
 
 class USpellParams;
 enum EPrecastDecalType : uint8;
 
 UCLASS()
-class PWABILITY_API AWBaseSpellActor : public AActor, public IPWSpellParamsInterface
+class PWABILITY_API APWSpellActor : public AActor, public IPWSpellParamsInterface
 {
 	GENERATED_BODY()
 
 public:
-	AWBaseSpellActor();
+	APWSpellActor();
 	virtual void BeginPlay() override;
 	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

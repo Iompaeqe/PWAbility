@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "WProjectileMovementComponent.generated.h"
+#include "PWProjectileMovementComponent.generated.h"
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class PWABILITY_API UWProjectileMovementComponent : public UProjectileMovementComponent
+class PWABILITY_API UPWProjectileMovementComponent : public UProjectileMovementComponent
 {
 	GENERATED_BODY()
 

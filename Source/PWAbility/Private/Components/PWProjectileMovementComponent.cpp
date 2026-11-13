@@ -1,20 +1,20 @@
 // Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 
-#include "Components/WProjectileMovementComponent.h"
+#include "Components/PWProjectileMovementComponent.h"
 
 
-FVector UWProjectileMovementComponent::GetHomingTargetLocation() const
+FVector UPWProjectileMovementComponent::GetHomingTargetLocation() const
 {
 	return HomingTargetLocation;
 }
 
-AActor* UWProjectileMovementComponent::GetHomingTargetActor() const
+AActor* UPWProjectileMovementComponent::GetHomingTargetActor() const
 {
 	return HomingTargetActor;
 }
 
-void UWProjectileMovementComponent::SetHomingTargetLocation(const FVector& TargetLocation)
+void UPWProjectileMovementComponent::SetHomingTargetLocation(const FVector& TargetLocation)
 {
 	USceneComponent* HomingTarget = NewObject<USceneComponent>(USceneComponent::StaticClass());
 	HomingTarget->SetWorldLocation(TargetLocation);
@@ -22,7 +22,7 @@ void UWProjectileMovementComponent::SetHomingTargetLocation(const FVector& Targe
 	HomingTargetLocation = TargetLocation;
 }
 
-void UWProjectileMovementComponent::SetHomingTargetActor(AActor* TargetActor)
+void UPWProjectileMovementComponent::SetHomingTargetActor(AActor* TargetActor)
 {
 	USceneComponent* HomingTarget = nullptr;
 	if (TargetActor)
@@ -31,7 +31,7 @@ void UWProjectileMovementComponent::SetHomingTargetActor(AActor* TargetActor)
 	HomingTargetActor = TargetActor;
 }
 
-void UWProjectileMovementComponent::AddVelocity(const FVector& DeltaForce)
+void UPWProjectileMovementComponent::AddVelocity(const FVector& DeltaForce)
 {
 	Velocity += DeltaForce;
 

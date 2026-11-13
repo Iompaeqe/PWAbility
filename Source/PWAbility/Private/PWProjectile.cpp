@@ -1,20 +1,20 @@
 // Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 
-#include "BaseProjectile.h"
+#include "PWProjectile.h"
 
 #include "PWAbilityEnums.h"
 #include "Ability/SpellParams.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
-#include "Components/WProjectileMovementComponent.h"
+#include "Components/PWProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "PWAbility.h"
 #include "Ability/Affectable.h"
 #include "Ability/EffectReceiver.h"
 
-ABaseProjectile::ABaseProjectile()
+APWProjectile::APWProjectile()
 {
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	Sphere->SetCollisionObjectType(ECC_WorldDynamic);
@@ -28,27 +28,27 @@ ABaseProjectile::ABaseProjectile()
 	//Sphere->SetCollisionResponseToChannel(ECC_PawnOverlap, ECR_Overlap);
 	SetRootComponent(Sphere);
 
-	ProjectileMovement = CreateDefaultSubobject<UWProjectileMovementComponent>("ProjectileMovement");
+	ProjectileMovement = CreateDefaultSubobject<UPWProjectileMovementComponent>("ProjectileMovement");
 	ProjectileMovement->SetIsReplicated(true);
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->ProjectileGravityScale = 0;
 }
 
-void ABaseProjectile::BeginPlay()
+void APWProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ABaseProjectile::OnOverlap);
-	Sphere->OnComponentHit.AddDynamic(this, &ABaseProjectile::OnBlockingHit);
+	Sphere->OnComponentBeginOverlap.AddDynamic(this, &APWProjectile::OnOverlap);
+	Sphere->OnComponentHit.AddDynamic(this, &APWProjectile::OnBlockingHit);
 	LoopingSound = UGameplayStatics::SpawnSoundAttached(ActiveSoundLoop, GetRootComponent());
 }
 
-void ABaseProjectile::Destroyed()
+void APWProjectile::Destroyed()
 {
 	Super::Destroyed();
 
-	Sphere->OnComponentBeginOverlap.RemoveDynamic(this, &ABaseProjectile::OnOverlap);
-	Sphere->OnComponentHit.RemoveDynamic(this, &ABaseProjectile::OnBlockingHit);
+	Sphere->OnComponentBeginOverlap.RemoveDynamic(this, &APWProjectile::OnOverlap);
+	Sphere->OnComponentHit.RemoveDynamic(this, &APWProjectile::OnBlockingHit);
 
 	if (LoopingSound)
 	{
@@ -57,7 +57,7 @@ void ABaseProjectile::Destroyed()
 	}
 }
 
-bool ABaseProjectile::ShouldIgnoreOverlap(const AActor* OtherActor) const
+bool APWProjectile::ShouldIgnoreOverlap(const AActor* OtherActor) const
 {
 	if (IsNoCollision(this))
 		return true;
@@ -70,7 +70,7 @@ bool ABaseProjectile::ShouldIgnoreOverlap(const AActor* OtherActor) const
 	return false;
 }
 
-bool ABaseProjectile::CanHitTarget(const AActor* OtherActor)
+bool APWProjectile::CanHitTarget(const AActor* OtherActor)
 {
 	if (!bCanHitTheSameTarget)
 	{
@@ -83,13 +83,13 @@ bool ABaseProjectile::CanHitTarget(const AActor* OtherActor)
 	return (!LastTime || Now - *LastTime >= TargetHitCooldown);
 }
 
-void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void APWProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!OtherActor || OtherActor == this) return;
 	if (ShouldIgnoreOverlap(OtherActor)) return;
 	if (IsActorProjectile(OtherActor))
 	{
-		const AWBaseSpellActor* OtherSpell = Cast<AWBaseSpellActor>(OtherActor);
+		const APWSpellActor* OtherSpell = Cast<APWSpellActor>(OtherActor);
 		if (HasReplicatedData() && (!OtherSpell || OtherSpell->HasReplicatedData()))
 			HandleProjectileCollision(OtherActor);
 		return;
@@ -111,27 +111,27 @@ void ABaseProjectile::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	OnProjectileOverlap(OtherActor);
 }
 
-void ABaseProjectile::OnBlockingHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void APWProjectile::OnBlockingHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// A projectile set to block something impacts on it the same way as on an overlap.
 	OnOverlap(HitComponent, OtherActor, OtherComp, 0, true, Hit);
 }
 
-void ABaseProjectile::OnRep_SpellParams()
+void APWProjectile::OnRep_SpellParams()
 {
 	Super::OnRep_SpellParams();
 
 	TArray<AActor*> OverlappingActors;
-	Sphere->GetOverlappingActors(OverlappingActors, ABaseProjectile::StaticClass());
+	Sphere->GetOverlappingActors(OverlappingActors, APWProjectile::StaticClass());
 	for (AActor* OtherActor : OverlappingActors)
 	{
-		ABaseProjectile* Other = Cast<ABaseProjectile>(OtherActor);
+		APWProjectile* Other = Cast<APWProjectile>(OtherActor);
 		OnOverlap(Sphere, Other, Other->Sphere, 0, false, FHitResult());
 		Other->OnOverlap(Other->Sphere, this, Sphere, 0, false, FHitResult());
 	}
 }
 
-void ABaseProjectile::HandleProjectileCollision(const AActor* OtherActor)
+void APWProjectile::HandleProjectileCollision(const AActor* OtherActor)
 {
 	switch (ProjectileVsProjectilePolicy)
 	 {
@@ -149,7 +149,7 @@ void ABaseProjectile::HandleProjectileCollision(const AActor* OtherActor)
 	 }
 }
 
-void ABaseProjectile::SimpleApplyEffectsAndDestroy(AActor* OtherActor)
+void APWProjectile::SimpleApplyEffectsAndDestroy(AActor* OtherActor)
 {
 	SimpleApplyEffects(OtherActor);
 
@@ -159,7 +159,7 @@ void ABaseProjectile::SimpleApplyEffectsAndDestroy(AActor* OtherActor)
 	}
 }
 
-void ABaseProjectile::SimpleApplyEffects(AActor* OtherActor)
+void APWProjectile::SimpleApplyEffects(AActor* OtherActor)
 {
 	HandleImpactEffects();
 
@@ -171,7 +171,7 @@ void ABaseProjectile::SimpleApplyEffects(AActor* OtherActor)
 	}
 }
 
-void ABaseProjectile::ApplyEffects(AActor* OtherActor) const
+void APWProjectile::ApplyEffects(AActor* OtherActor) const
 {
 	if (!HasAuthority()) return;
 
@@ -181,7 +181,7 @@ void ABaseProjectile::ApplyEffects(AActor* OtherActor) const
 		IAffectable::Execute_ApplyEffects(Receiver, SpellParams);
 }
 
-void ABaseProjectile::HandleImpactEffects()
+void APWProjectile::HandleImpactEffects()
 {
 	if (HasAuthority())
 		MulticastPlayImpactEffects();
@@ -189,7 +189,7 @@ void ABaseProjectile::HandleImpactEffects()
 		PlayImpactEffects();
 }
 
-void ABaseProjectile::PlayImpactEffects()
+void APWProjectile::PlayImpactEffects()
 {
 	if (bHitEffectsPlayed) return;
 	bHitEffectsPlayed = true;
@@ -204,18 +204,18 @@ void ABaseProjectile::PlayImpactEffects()
 	}
 }
 
-void ABaseProjectile::MulticastPlayImpactEffects_Implementation()
+void APWProjectile::MulticastPlayImpactEffects_Implementation()
 {
 	PlayImpactEffects();
 }
 
-void ABaseProjectile::Bounce(const FVector PointOfOrigin) const
+void APWProjectile::Bounce(const FVector PointOfOrigin) const
 {
 	ProjectileMovement->Velocity = CalculateBounceVelocity(PointOfOrigin, ProjectileMovement->Velocity);
 	ProjectileMovement->UpdateComponentVelocity();
 }
 
-void ABaseProjectile::ResetSpell()
+void APWProjectile::ResetSpell()
 {
 	Super::ResetSpell();
 
@@ -225,7 +225,7 @@ void ABaseProjectile::ResetSpell()
 	HitCount = 0;
 }
 
-FVector ABaseProjectile::CalculateBounceVelocity(const FVector PointOfOrigin, const FVector Velocity) const
+FVector APWProjectile::CalculateBounceVelocity(const FVector PointOfOrigin, const FVector Velocity) const
 {
 	FVector SphereOrigin = PointOfOrigin;
 	SphereOrigin.Z = GetActorLocation().Z;

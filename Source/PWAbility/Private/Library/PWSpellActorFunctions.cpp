@@ -1,12 +1,12 @@
 ﻿// Copyright (c) 2025 Metehan Goksel Kurtulan (Iompaeqe)
 
 
-#include "Library/AbilityActorHelperFunctions.h"
+#include "Library/PWSpellActorFunctions.h"
 
 #include "NiagaraComponent.h"
 #include "GameFramework/MovementComponent.h"
 
-void UAbilityActorHelperFunctions::CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* ProjectileNiagara, float Delay, bool bHideActor)
+void UPWSpellActorFunctions::CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* ProjectileNiagara, float Delay, bool bHideActor)
 {
 	AActor* Owner = CollisionComponent ? CollisionComponent->GetOwner() : ProjectileNiagara ? ProjectileNiagara->GetOwner() : nullptr;
 	if (!Owner)

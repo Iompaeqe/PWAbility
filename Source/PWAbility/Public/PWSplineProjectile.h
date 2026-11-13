@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseProjectile.h"
+#include "PWProjectile.h"
 #include "PWSplineProjectile.generated.h"
 
 class USplineComponent;
@@ -11,7 +11,7 @@ class USplineComponent;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSplinePathCompleteDelegate);
 
 UCLASS(BlueprintType, Blueprintable)
-class PWABILITY_API APWSplineProjectile : public ABaseProjectile
+class PWABILITY_API APWSplineProjectile : public APWProjectile
 {
 	GENERATED_BODY()
 
