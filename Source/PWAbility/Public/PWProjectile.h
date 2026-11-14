@@ -89,10 +89,6 @@ protected:
 	UFUNCTION()
 	void OnBlockingHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
-	//Effects
-	UFUNCTION(BlueprintCallable, Category = "Projectile|Effects")
-	virtual void ApplyEffects(AActor* OtherActor) const; //server only
-	
 	//Impact Effects
 	UFUNCTION(BlueprintCallable, Category = "Projectile|Effects")
 	virtual void HandleImpactEffects();

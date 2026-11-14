@@ -136,4 +136,15 @@ bool APWSpellActor::IsDontTriggerCollision(const AActor* OtherActor)
 	return OtherActor->Implements<UPWDontTriggerCollision>();
 }
 
+bool APWSpellActor::ApplyEffectsToActor(AActor* Target) const
+{
+	if (!HasAuthority() || !SpellParams || !Target)
+		return false;
 
+	UObject* Receiver = IPWAffectable::Find(Target);
+	if (!Receiver)
+		return false;
+
+	SpellParams->ActorHit = Target;
+	return IPWAffectable::Execute_ApplyEffects(Receiver, SpellParams);
+}

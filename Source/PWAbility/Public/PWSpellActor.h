@@ -70,6 +70,10 @@ protected:
 	// Who an impact here affects: the ability's target resolver decides when the spell params carry one, otherwise only the actor that was hit.
 	UFUNCTION(BlueprintCallable, Category = "BaseSpell|Target")
 	TArray<AActor*> GetImpactTargets(AActor* HitActor) const;
+
+	// Server only. Gives an actor this spell's effects, through whatever takes them for it, such as a character's player state. Each effect group's filter still decides who is affected.
+	UFUNCTION(BlueprintCallable, Category = "BaseSpell|Effects")
+	virtual bool ApplyEffectsToActor(AActor* Target) const;
 	
 
 private:

@@ -167,18 +167,8 @@ void APWProjectile::SimpleApplyEffects(AActor* OtherActor)
 	{
 		for (AActor* Target : GetImpactTargets(OtherActor))
 			if (CheckForEffectTarget(Target))
-				ApplyEffects(Target);
+				ApplyEffectsToActor(Target);
 	}
-}
-
-void APWProjectile::ApplyEffects(AActor* OtherActor) const
-{
-	if (!HasAuthority()) return;
-
-	SpellParams->ActorHit = OtherActor;
-	
-	if (UObject* Receiver = IPWAffectable::Find(OtherActor))
-		IPWAffectable::Execute_ApplyEffects(Receiver, SpellParams);
 }
 
 void APWProjectile::HandleImpactEffects()
