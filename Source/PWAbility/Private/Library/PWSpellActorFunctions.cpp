@@ -6,18 +6,18 @@
 #include "NiagaraComponent.h"
 #include "GameFramework/MovementComponent.h"
 
-void UPWSpellActorFunctions::CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* ProjectileNiagara, float Delay, bool bHideActor)
+void UPWSpellActorFunctions::CascadedDestroy(UPrimitiveComponent* CollisionComponent, UNiagaraComponent* Effect, float Delay, bool bHideActor)
 {
-	AActor* Owner = CollisionComponent ? CollisionComponent->GetOwner() : ProjectileNiagara ? ProjectileNiagara->GetOwner() : nullptr;
+	AActor* Owner = CollisionComponent ? CollisionComponent->GetOwner() : Effect ? Effect->GetOwner() : nullptr;
 	if (!Owner)
 		return;
 
 	if (CollisionComponent)
 		CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	if (ProjectileNiagara)
+	if (Effect)
 	{
-		ProjectileNiagara->Deactivate();
-		ProjectileNiagara->SetAutoDestroy(true);
+		Effect->Deactivate();
+		Effect->SetAutoDestroy(true);
 	}
 	if (UMovementComponent* Movement = Owner->FindComponentByClass<UMovementComponent>())
 	{
